@@ -1,6 +1,24 @@
+import type { PinoLogger } from "hono-pino"
+
+import { logger } from "@/middlewares/logger"
 import { OpenAPIHono } from "@hono/zod-openapi"
 
-const app = new OpenAPIHono()
+import { config } from "dotenv"
+import { expand } from "dotenv-expand"
+
+import * as httpStatusCode from "@/http/status-code"
+import * as httpStatusError from "@/http/status-error"
+
+expand(config())
+
+type AppBindings = {
+  Variables: {
+    logger: PinoLogger
+  }
+}
+
+const app = new OpenAPIHono<AppBindings>()
+app.use(logger())
 
 app.get("/", ctx => {
   return ctx.text("Hello Hono!")
@@ -13,21 +31,21 @@ app.get("/error", () => {
 app.notFound(ctx => {
   return ctx.json(
     {
-      code: 404,
-      error: "Resource not found.",
+      code: httpStatusCode.NOT_FOUND,
+      error: httpStatusError.NOT_FOUND,
     },
-    404
+    httpStatusCode.NOT_FOUND
   )
 })
 
 app.onError((err, ctx) => {
-  console.error(err.stack)
+  ctx.var.logger.error(err.stack)
   return ctx.json(
     {
-      code: 500,
-      error: "Internal server error.",
+      code: httpStatusCode.INTERNAL_SERVER_ERROR,
+      error: httpStatusError.INTERNAL_SERVER_ERROR,
     },
-    500
+    httpStatusCode.INTERNAL_SERVER_ERROR
   )
 })
 
