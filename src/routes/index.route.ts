@@ -1,25 +1,34 @@
+import type { ZodSchema } from "zod"
+
 import { createRouter } from "@/lib/create-app"
 import { createRoute, z } from "@hono/zod-openapi"
+
+import * as httpStatusCode from "@/http/status-code"
+
+function jsonContent<T extends ZodSchema>(schema: T, description: string) {
+  return {
+    content: {
+      "application/json": {
+        schema,
+      },
+    },
+    description,
+  }
+}
 
 const router = createRouter().openapi(
   createRoute({
     method: "get",
-    path: "/",
+    path: "/api",
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.object({
-              message: z.string(),
-            }),
-          },
-        },
-        description: "SadPan API Index",
-      },
+      [httpStatusCode.OK]: jsonContent(
+        z.object({ message: z.string() }),
+        "SadPan API Index"
+      ),
     },
   }),
   ctx => {
-    return ctx.json({ message: "SadPan API" }, 200)
+    return ctx.json({ message: "SadPan API" }, httpStatusCode.OK)
   }
 )
 
