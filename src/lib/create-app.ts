@@ -28,8 +28,12 @@ const onError: ErrorHandler = (err, ctx) => {
   )
 }
 
-export default function createApp() {
-  const app = new OpenAPIHono<AppBindings>({ strict: false })
+export function createRouter() {
+  return new OpenAPIHono<AppBindings>({ strict: false })
+}
+
+export function createApp() {
+  const app = createRouter()
 
   app.use(logger())
   app.notFound(notFound)
