@@ -1,4 +1,4 @@
-import type { ZodSchema } from "zod"
+import type { ZodSchema } from "./types"
 
 export function jsonContent<T extends ZodSchema>(schema: T, description: string) {
   return {

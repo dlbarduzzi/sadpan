@@ -1,8 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { jsonContent, jsonContentRequired } from "@/lib/json-content"
 
-import * as httpStatusCode from "@/http/status-code"
+import { createErrorSchema } from "@/lib/error-schema"
 import { insertAlertSchema, selectAlertsSchema } from "@/db/schema"
+
+import * as httpStatusCode from "@/http/status-code"
+import * as httpStatusPhrase from "@/http/status-phrase"
 
 const tags = ["Alerts"]
 
@@ -23,7 +26,15 @@ export const create = createRoute({
   },
   tags,
   responses: {
-    [httpStatusCode.CREATED]: jsonContent(selectAlertsSchema, "Create a new alert"),
+    [httpStatusCode.CREATED]: jsonContent(selectAlertsSchema, "The created alert"),
+    [httpStatusCode.UNPROCESSABLE_CONTENT]: jsonContent(
+      createErrorSchema(
+        insertAlertSchema,
+        httpStatusCode.UNPROCESSABLE_CONTENT,
+        httpStatusPhrase.UNPROCESSABLE_CONTENT
+      ),
+      "The validation error(s)"
+    ),
   },
 })
 

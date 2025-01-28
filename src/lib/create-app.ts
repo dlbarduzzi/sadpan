@@ -41,7 +41,7 @@ export function createRouter() {
             ok: false,
             code: httpStatusCode.UNPROCESSABLE_CONTENT,
             error: httpStatusPhrase.UNPROCESSABLE_CONTENT,
-            fieldErrors: res.error.flatten().fieldErrors,
+            fieldErrors: res.error,
           },
           httpStatusCode.UNPROCESSABLE_CONTENT
         )
