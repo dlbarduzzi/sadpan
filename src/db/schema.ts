@@ -11,7 +11,10 @@ export const alerts = sqliteTable("alerts", {
     .$onUpdate(() => new Date()),
 })
 
-export const insertAlertSchema = createInsertSchema(alerts).omit({
+export const insertAlertSchema = createInsertSchema(alerts, {
+  name: schema => schema.min(3).max(256),
+  expr: schema => schema.min(6),
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
