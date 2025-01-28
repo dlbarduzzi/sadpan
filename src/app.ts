@@ -1,15 +1,14 @@
 import { createApp } from "@/lib/create-app"
 
-import index from "@/routes/index.route"
 import configOpenAPI from "@/lib/config-openapi"
+
+import index from "@/routes/index.route"
+import alerts from "@/routes/alerts/alerts.index"
 
 const app = createApp()
 configOpenAPI(app)
 
-const routes = [index]
-
-routes.forEach(route => {
-  app.route("/", route)
-})
+app.route("/api/v1/index", index)
+app.route("/api/v1/alerts", alerts)
 
 export default app
