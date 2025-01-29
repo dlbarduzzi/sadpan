@@ -8,7 +8,7 @@ import * as httpStatusCode from "@/http/status-code"
 const router = createRouter().openapi(
   createRoute({
     tags: ["Index"],
-    path: "/",
+    path: "/api/v1/index",
     method: "get",
     responses: {
       [httpStatusCode.OK]: jsonContent(

@@ -20,7 +20,7 @@ const idParamSchema = z.object({
 })
 
 export const list = createRoute({
-  path: "/",
+  path: "/api/v1/alerts",
   method: "get",
   tags,
   responses: {
@@ -29,7 +29,7 @@ export const list = createRoute({
 })
 
 export const create = createRoute({
-  path: "/",
+  path: "/api/v1/alerts",
   method: "post",
   request: {
     body: jsonContentRequired(insertAlertSchema, "The alert to be created"),
@@ -49,7 +49,7 @@ export const create = createRoute({
 })
 
 export const getOne = createRoute({
-  path: "/{id}",
+  path: "/api/v1/alerts/{id}",
   method: "get",
   request: {
     params: idParamSchema,
@@ -70,7 +70,7 @@ export const getOne = createRoute({
 })
 
 export const patch = createRoute({
-  path: "/{id}",
+  path: "/api/v1/alerts/{id}",
   method: "patch",
   request: {
     params: idParamSchema,
@@ -92,7 +92,7 @@ export const patch = createRoute({
 })
 
 export const remove = createRoute({
-  path: "/{id}",
+  path: "/api/v1/alerts/{id}",
   method: "delete",
   request: {
     params: idParamSchema,

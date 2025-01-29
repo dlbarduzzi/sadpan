@@ -8,7 +8,12 @@ import alerts from "@/routes/alerts/alerts.index"
 const app = createApp()
 configOpenAPI(app)
 
-app.route("/api/v1/index", index)
-app.route("/api/v1/alerts", alerts)
+const routes = [index, alerts] as const
+
+routes.forEach(route => {
+  app.route("/", route)
+})
+
+export type AppType = (typeof routes)[number]
 
 export default app
