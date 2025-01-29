@@ -21,3 +21,4 @@ export const insertAlertSchema = createInsertSchema(alerts, {
 })
 
 export const selectAlertsSchema = createSelectSchema(alerts)
+export const patchAlertsSchema = insertAlertSchema.partial()
