@@ -1,6 +1,7 @@
 import type { ZodSchema } from "./types"
 
 import { z } from "@hono/zod-openapi"
+import * as httpStatusPhrase from "@/http/status-phrase"
 
 export const createErrorSchema = <T extends ZodSchema>(
   schema: T,
@@ -32,3 +33,17 @@ export const createErrorSchema = <T extends ZodSchema>(
       }),
   })
 }
+
+export const createMessageObjectSchema = (exampleMessage: string = "Hello World") => {
+  return z
+    .object({
+      message: z.string(),
+    })
+    .openapi({
+      example: {
+        message: exampleMessage,
+      },
+    })
+}
+
+export const notFoundSchema = createMessageObjectSchema(httpStatusPhrase.NOT_FOUND)

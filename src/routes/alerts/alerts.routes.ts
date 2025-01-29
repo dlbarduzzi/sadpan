@@ -1,13 +1,23 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { jsonContent, jsonContentRequired } from "@/lib/json-content"
 
-import { createErrorSchema } from "@/lib/error-schema"
+import { createErrorSchema, notFoundSchema } from "@/lib/error-schema"
 import { insertAlertSchema, selectAlertsSchema } from "@/db/schema"
 
 import * as httpStatusCode from "@/http/status-code"
 import * as httpStatusPhrase from "@/http/status-phrase"
 
 const tags = ["Alerts"]
+
+const idParamSchema = z.object({
+  id: z.coerce.number().openapi({
+    param: {
+      name: "id",
+      in: "path",
+    },
+    example: 12,
+  }),
+})
 
 export const list = createRoute({
   path: "/",
@@ -38,5 +48,27 @@ export const create = createRoute({
   },
 })
 
+export const getOne = createRoute({
+  path: "/:id",
+  method: "get",
+  request: {
+    params: idParamSchema,
+  },
+  tags,
+  responses: {
+    [httpStatusCode.OK]: jsonContent(selectAlertsSchema, "The requested alert"),
+    [httpStatusCode.NOT_FOUND]: jsonContent(notFoundSchema, "Alert not found"),
+    [httpStatusCode.UNPROCESSABLE_CONTENT]: jsonContent(
+      createErrorSchema(
+        idParamSchema,
+        httpStatusCode.UNPROCESSABLE_CONTENT,
+        httpStatusPhrase.UNPROCESSABLE_CONTENT
+      ),
+      "Invalid id error"
+    ),
+  },
+})
+
 export type ListRoute = typeof list
 export type CreateRoute = typeof create
+export type GetOneRoute = typeof getOne
